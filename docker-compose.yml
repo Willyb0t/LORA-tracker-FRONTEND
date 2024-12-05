@@ -1,0 +1,26 @@
+services:
+  frontend:
+    build:
+      context: ./web-tracker   # Ubicación del Dockerfile del frontend
+      dockerfile: Dockerfile # Nombre del Dockerfile en frontend (puede ser omitido si se llama Dockerfile)
+    ports:
+      - "3000:80"           # Mapea el puerto 80 del contenedor al puerto 3000 de la máquina local
+    networks:
+      - app-network         # Red compartida con el backend
+    depends_on:
+      - backend             # Asegura que el backend se inicie antes que el frontend
+
+  backend:
+    build:
+      context: ./backend     # Ubicación del Dockerfile del backend
+      dockerfile: Dockerfile # Nombre del Dockerfile en backend (puede ser omitido si se llama Dockerfile)
+    ports:
+      - "8000:8000"          # Mapea el puerto 8000 del contenedor al puerto 8000 de la máquina local
+    volumes:
+      - ./backend:/app       # Sincroniza el directorio del backend local con el contenedor (opcional para desarrollo)
+    networks:
+      - app-network          # Red compartida con el frontend
+
+networks:
+  app-network:
+    driver: bridge            # Define una red compartida entre los servicios

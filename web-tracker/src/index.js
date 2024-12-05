@@ -3,11 +3,14 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { CoordenadesContextProvider } from './context/CoordenadesContextProvider';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <CoordenadesContextProvider>
+      <App/>
+    </CoordenadesContextProvider>
   </React.StrictMode>
 );
 

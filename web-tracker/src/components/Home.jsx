@@ -5,13 +5,21 @@ import Link from 'react-router-dom'
 import { useContext } from 'react'
 import { CoordenadesContext } from '../context/CoordenadesContextProvider'
 import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
 
 const Home = () => {
     const navigate =  useNavigate();
+    const {direccionFija, setDireccionFija} = useContext(CoordenadesContext);
     const [state, setState] = useState({
         latitude: 0,
         longitude: 0
     })
+
+    const fetchNewDireccion = async ()=>{
+        const response = await axios.get(`https://us1.locationiq.com/v1/reverse?key=pk.a529b87203880f3210ed7974b8c22671&lat=${state.latitude}&lon=${state.longitude }&format=json&`)
+        setDireccionFija(response.data.display_name);
+        console.log(response.data.display_name)
+    }
     useEffect(()=>{
         navigator.geolocation.getCurrentPosition(
             function (position){
@@ -26,7 +34,8 @@ const Home = () => {
         )
     },[])
     const {coord, setCoord} = useContext(CoordenadesContext)
-    const clicked = e =>{
+    const clicked = async e =>{
+        await fetchNewDireccion();
         setCoord({
             latitude: state.latitude,
             longitude: state.longitude

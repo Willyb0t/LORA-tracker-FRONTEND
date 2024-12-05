@@ -1,0 +1,25 @@
+# Usa una imagen oficial de Python como base
+FROM python:3.12-alpine
+
+# Establece el directorio de trabajo dentro del contenedor
+WORKDIR /app
+
+# Copia los archivos requirements.txt (o pipenv/poetry files) para instalar las dependencias
+COPY requirements.txt ./
+
+# Instala las dependencias
+RUN pip install --no-cache-dir -r requirements.txt
+
+
+# Copia todo el código de la aplicación Django al contenedor
+COPY . .
+
+# Establece variables de entorno necesarias para Django
+ENV PYTHONDONTWRITEBYTECODE=1  
+ENV PYTHONUNBUFFERED=1         
+
+# Exponer el puerto donde Django correrá
+EXPOSE 8000
+
+# Ejecuta migraciones y corre el servidor de desarrollo
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
